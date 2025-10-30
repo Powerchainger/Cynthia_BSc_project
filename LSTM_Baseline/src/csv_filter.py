@@ -54,8 +54,8 @@ def kong_et_al_data() :
     training_data = [] 
 
     # Validation data: 06/08/2013 to 22/08/2013
-    validation_start = '2013-06-01 00:00:00'
-    validation_end = '2013-08-05 23:59:59'
+    validation_start = '2013-08-06 00:00:00'
+    validation_end = '2013-08-22 23:59:59'
     validation_data = []
 
     # Testing data: 23/08/2013 to 31/08/2013
