@@ -65,7 +65,7 @@ def load_daily_profiles(filepath) :
 
     return daily_profiles
 
-def plot_clusters(clusters, data, customer_id) :
+def plot_clusters(clusters, data, customer_id=None) :
 
     labels = clusters.labels_
     unique_labels = set(labels)
@@ -88,7 +88,10 @@ def plot_clusters(clusters, data, customer_id) :
             lines.append(Line2D([0], [0], color=[0, 0, 0, 1], lw=1))
 
     # for the information while it's running
-    print('Plotting readings for customer: %d' % customer_id)
+    if customer_id is None:
+        print('Plotting aggregate readings')
+    else:
+        print('Plotting readings for customer: %d' % customer_id)
     print('Amount of clusters: %d' % n_clusters_)
 
     fig, ax = plt.subplots()
@@ -112,13 +115,20 @@ def plot_clusters(clusters, data, customer_id) :
 
 
     ax.legend(lines, desc, loc='upper right')
-    plt.title('daily profiles for Customer %d' % customer_id)
+    if customer_id is None:
+        plt.title('aggregate daily profiles')
+    else:
+        plt.title('daily profiles for Customer %d' % customer_id)
     plt.xlabel('Time Index')
     plt.ylabel('Energy Consumed [kWh]')
+    
+    if customer_id is None:
+        plt.savefig('../../figures/aggregate.png')
+    else:
+        plt.savefig('../../figures/customer%d.png' % customer_id)
 
-    plt.savefig('../../figures/customer%d.png' % customer_id)
     plt.close()
 
 #load_daily_profiles('../../dataset/training_data.csv')
-DBSCAN_individual('../../dataset/all_data.csv')
+#DBSCAN_individual('../../dataset/all_data.csv')
 
