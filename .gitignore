@@ -1,4 +1,6 @@
 LSTM_Baseline/dataset/CD_INTERVAL_READING_ALL_NO_QUOTES.csv
 LSTM_Baseline/dataset/sgsc-cthanplug-readings.csv
 LSTM_Baseline/dataset/test.csv
-LSTM_Baseline/src/__pycache__/csv_filter.cpython-312.pyc
+LSTM_Baseline/src/__pycache__/csv_filter.cpython-312.py
+
+*/__pycache__/
