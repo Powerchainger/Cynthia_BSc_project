@@ -1,42 +1,39 @@
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 
-def pre_process_data(rawData):
+def pre_process_data(data_raw):
    
-    rawSamples = rawData[0]
-    rawTimeIndex = rawData[1]
-    rawWeekdayIndex = rawData[2]
-    rawHolidayIndex = rawData[3]
+    readings_raw = data_raw[0]
+    time_idx_raw = data_raw[1]
+    weekday_idx_raw = data_raw[2]
+    holiday_idx_raw = data_raw[3]
 
-    samples = normalize(rawSamples)
-    timeIndex = onehot_encoder(rawTimeIndex)
-    weekdayIndex = onehot_encoder(rawWeekdayIndex)
-    holidayIndex = onehot_encoder(rawHolidayIndex)
-
+    readings_normalized, scaler = _normalize(readings_raw)
+    time_idx = _onehot_encoder(time_idx_raw)
+    weekday_idx = _onehot_encoder(weekday_idx_raw)
+    holiday_idx = _onehot_encoder(holiday_idx_raw)
+   
+    samples = [ np.concatenate((E, I, D, H)) for (E, I, D, H)
+        in zip(readings_normalized, time_idx, weekday_idx, holiday_idx) ]
     
-    return [ samples, timeIndex, weekdayIndex, holidayIndex ] 
+    return samples, scaler
 
-# one hot encoder:
-def onehot_encoder(data):
+def _onehot_encoder(data):
     # first make sure the lowest value in the data is 0
     shifted_data = [ x + abs(min(data)) for x in data ]
 
     #cardianlity + 1 because we start from 0 and we need to index the max value
     cardinality = max(shifted_data) + 1 
     
-    return[ onehot_encoder_elem(x, cardinality) for x in shifted_data ]
+    return[ _onehot_encoder_elem(x, cardinality) for x in shifted_data ]
 
-def onehot_encoder_elem(element, cardinality):
+def _onehot_encoder_elem(element, cardinality):
     vector = np.zeros(cardinality)
     vector[element] = 1
 
     return vector
 
 # normalizer, uses min-max scaling
-def normalize(data):
-    data_min = min(data)
-    data_max = max(data)
-
-    normalized_data = [ (x - data_min) / (data_max - data_min) for x in data]
-    return normalized_data
-
+def _normalize(data):
+    scaler = MinMaxScaler()
+    return scaler.fit_transform(np.array(data).reshape(-1, 1)), scaler

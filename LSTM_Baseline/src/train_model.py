@@ -4,49 +4,47 @@ import torch
 from modules.io.csv_config import Csv_config
 from modules.io.save import save_model
 
-from modules.model.forecaster import LSTM_forecaster as Model
-from modules.model.trainer import LSTM_forecaster_Trainer as Trainer
-from modules.model.config import Model_config
+from modules.model.model import Model 
+from modules.model.model_params import Model_params
+
+from modules.model.trainer import Trainer 
+
+EPOCHS = 150 # TODO: remove these constants
+INPUT_DIM = 57
+HIDDEN_DIM = 20
+LAYER_DIM = 2
+LOOK_BACK = 12 
 
 def main():
     # the args the module was run with, TODO: do args checking
     #argc = len(sys.argv)
     #argv = sys.argv
 
-    # filepath = argv[1]
-    # hiddenLayers = argv[2]
-    # hiddenNodes = argv[3]
-    # lookBack = argv[4]
-    # individual = argv[5] 
-
-    csvPath = '../dataset/training_data.csv'
-    csvConfig = Csv_config(
+    csv_path = '../dataset/training_data.csv'
+    csv_config = Csv_config(
         'READING_DATETIME',
         ' GENERAL_SUPPLY_KWH',
         48,
         '30min')
 
-    modelConfig = Model_config(
-        57, # input dim   
-        20, # nodes per hidden layer
-        2,  # hidden layers
-        1,  # output dimension
-        2,  # lookback
-        torch.nn.MSELoss, #loss function
-        torch.optim.Adam, #optimizer function
-        150) # epochs
-
+    model_params = Model_params(
+        INPUT_DIM, # input dim   
+        HIDDEN_DIM, # nodes per hidden layer
+        LAYER_DIM,  # hidden layers
+        LOOK_BACK)  # lookback
+      
     # init the model
-    model = Model(modelConfig)
+    model = Model(model_params)
     
     #init the trainer
     trainer = Trainer(
         model,
-        modelConfig,
-        csvPath,
-        csvConfig)
+        model_params,
+        csv_path,
+        csv_config,
+        EPOCHS)
 
-    trainer.train()
+    trainer.run()
     
     save_model(model,'../models/test.pickle')
 
