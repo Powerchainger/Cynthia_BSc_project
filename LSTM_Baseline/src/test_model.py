@@ -2,11 +2,21 @@ import sys
 import torch
 
 from modules.io.csv_config import Csv_config
-from modules.io.save import save_model
 
-from modules.model.forecaster import LSTM_forecaster as Model
-from modules.model.tester import LSTM_forecaster_tester as Tester
-from modules.model.config import Model_config
+from modules.model.model import Model 
+from modules.model.model_params import Model_params
+
+from modules.model.tester import Tester 
+
+INPUT_DIM = 57
+HIDDEN_DIM = 20
+LAYER_DIM = 2 
+LOOK_BACK = 2 
+
+MODEL_PATH = '../models/test.pt'
+CSV_PATH_TRAINING = '../dataset/training_data.csv'
+CSV_PATH_VALIDATION = '../dataset/validation_data.csv'
+CSV_PATH_TESTING = '../dataset/testing_data.csv'
 
 def main():
     # the args the module was run with, TODO: do args checking
@@ -19,31 +29,28 @@ def main():
     # lookBack = argv[4]
     # individual = argv[5] 
 
-    csvPath = '../dataset/validation_data.csv'
-    csvConfig = Csv_config(
+    csv_path = CSV_PATH_TESTING 
+    csv_config = Csv_config(
         'READING_DATETIME',
         ' GENERAL_SUPPLY_KWH',
         48,
         '30min')
 
-    modelConfig = Model_config(
-        57, # input dim   
-        20, # nodes per hidden layer
-        2,  # hidden layers
-        1,  # output dimension
-        2,  # lookback
-        torch.nn.MSELoss, #loss function
-        torch.optim.Adam, #optimizer function
-        150) # epochs
+    model_params = Model_params(
+        INPUT_DIM, # input dim   
+        HIDDEN_DIM, # nodes per hidden layer
+        LAYER_DIM,  # hidden layers
+        LOOK_BACK)  # lookback
 
     # init the model
-    model = Model(modelConfig)
-    
-    model.load_state_dict(torch.load('../models/test.pickle', weights_only=True))
+    model = Model(model_params)
+   
+    # load the weights
+    model.load_state_dict(torch.load(MODEL_PATH, weights_only=True))
 
-    tester = Tester(model, modelConfig, csvPath, csvConfig)
-
-    tester.test()
+    # test the model on the dataset
+    tester = Tester(model, model_params, csv_path, csv_config)
+    tester.run()
 
 if __name__ == '__main__':
     main() 

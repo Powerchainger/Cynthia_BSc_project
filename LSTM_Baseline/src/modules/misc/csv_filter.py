@@ -84,7 +84,7 @@ def kong_et_al_data() :
         
         cnt = cnt + 1
         if (cnt % 100 == 0) :
-            print("processed: ", cnt*100, " lines")
+            print("processed: ", cnt*100*1000, " lines")
 
 
     training_data = pd.concat(training_data)
@@ -95,4 +95,11 @@ def kong_et_al_data() :
     validation_data.to_csv(validation_path)
     testing_data.to_csv(testing_path)
 
-kong_et_al_data()
+def kong_et_al_individual():
+    customer_ids = load_customer_ids() 
+   
+    for customer_id in customer_ids :
+
+
+
+kong_et_al_individual()

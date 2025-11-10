@@ -11,9 +11,9 @@ from modules.model.trainer import Trainer
 
 EPOCHS = 150 # TODO: remove these constants
 INPUT_DIM = 57
-HIDDEN_DIM = 20 
+HIDDEN_DIM = 20
 LAYER_DIM = 2 
-LOOK_BACK = 2 
+LOOK_BACK = 12 
 
 MODEL_PATH = '../models/test.pt'
 CSV_PATH_TRAINING = '../dataset/training_data.csv'
