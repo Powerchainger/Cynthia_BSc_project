@@ -6,7 +6,7 @@ from sklearn.metrics import mean_absolute_percentage_error
 
 from .model_wrapper import Model_wrapper
 
-_LOSS_FUNCTION = torch.nn.MSELoss
+_LOSS_FUNCTION = torch.nn.L1Loss
 _OPTIMIZER = torch.optim.Adam
 
 class Trainer(Model_wrapper):
