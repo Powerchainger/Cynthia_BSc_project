@@ -16,7 +16,6 @@ def process(df) :
                                end=time_end,
                                freq='h')
 
-    cnt = 0
     for hr in time_range : 
         # we grab the average consumption at hr, meaning we grab the total
         # consumption starting at hour ending at hour+1, and average that
@@ -37,9 +36,6 @@ def process(df) :
         row = [hr] + avg_kwh.tolist()
         new_df.loc[len(new_df)] = row   
 
-        cnt = cnt + 1
-        if cnt % 100 == 0 :
-            print(f'processed {cnt} lines....')
     return new_df 
 
 def main() :

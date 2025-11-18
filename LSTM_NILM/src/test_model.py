@@ -21,11 +21,11 @@ def main() :
     testing_data_path = sys.argv[3]
 
     # load the model which we want to test 
-    model_params = load_model_params(model_params_path)
-    model = load_model(model_path, model_params)
+    model_params, appliances = load_model_params(model_params_path)
+    model = load_model(model_path, model_params + (len(appliances),))
 
     # load the data to test the model on
-    testing_data = load_data(testing_data_path)
+    testing_data = load_data(testing_data_path, appliances)
 
     # test the model
     test_model(model, testing_data)

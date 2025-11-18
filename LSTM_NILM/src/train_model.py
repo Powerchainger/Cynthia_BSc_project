@@ -25,12 +25,12 @@ def main() :
     model_path = sys.argv[5]
   
     # load the data from the files as given in the args 
-    model_params = load_model_params(model_params_path)
-    training_data = load_data(training_data_path)
-    validation_data = load_data(validation_data_path)
+    model_params, appliances = load_model_params(model_params_path)
+    training_data = load_data(training_data_path, appliances)
+    validation_data = load_data(validation_data_path, appliances)
 
     # train the model
-    model = train_model(model_params, training_data, validation_data, epochs)
+    model = train_model(model_params + (len(appliances),), training_data, validation_data, epochs)
 
     # save the model to the path given in the args
     save_model(model, model_path)

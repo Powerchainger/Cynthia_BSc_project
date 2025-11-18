@@ -12,7 +12,10 @@ _OUTPUT_DIM = 24
 #   time_dim        = 24  +
 #   -------------------
 #   input_dim       = 44 + 1*appliance
-_INPUT_DIM = 44 
+_INPUT_DIM = 44
+
+# currently binary
+_APPLIANCE_INPUT_DIM = 1
 
 # class responsible for the model that performs load forecasting
 class Forecaster(nn.Module):
@@ -22,8 +25,10 @@ class Forecaster(nn.Module):
         self.time_steps = time_steps
         self.appliance_count = appliance_count
 
+        input_dim = _INPUT_DIM + appliance_count * _APPLIANCE_INPUT_DIM
+
         self.lstm = nn.LSTM(
-            _INPUT_DIM,
+            input_dim,
             hidden_layer_nodes,
             hidden_layers)
 

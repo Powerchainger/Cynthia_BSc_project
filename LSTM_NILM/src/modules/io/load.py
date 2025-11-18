@@ -13,22 +13,23 @@ from modules.model.model import Forecaster as Model
 #  (hidden_layer_nodes, hidden_layers, time_steps) 
 def load_model_params(file_path) :
 
-    try :
+    #try :
         # open the file 
-        with open(file_path, 'r') as file: 
+    with open(file_path, 'r') as file: 
             # read the JSON
-            data = json.load(file)
-    except :
-        print(f'Could not read model params from file:{file_path}')
-        exit(1)
+        data = json.load(file)
+    #except :
+    #    print(f'Could not read model params from file:{file_path}')
+    #    exit(1)
    
     # grab the params from the JSON
     hidden_layer_nodes = data['hidden_layer_nodes']
     hidden_layers = data['hidden_layers']
     time_steps = data['time_steps']
+    appliances = data['appliances'] # array
 
     # return the params as a touple
-    return (hidden_layer_nodes, hidden_layers, time_steps)
+    return (hidden_layer_nodes, hidden_layers, time_steps), appliances
 
 # Function that loads initializes a model according to params,
 # then it loads the weights for said model from file_path.
@@ -66,7 +67,7 @@ def load_model(file_path, params) :
 #       2. the current month of the year    from 1 to 12
 #       3. the current day of the week      from 1 to 7
 #       4. the current hour of the day      from 0 to 23 
-def load_data(file_path) :
+def load_data(file_path, appliances) :
     print(f'Loading data from CSV:\'{file_path}\'') 
     # open the csv
     try :
@@ -75,9 +76,13 @@ def load_data(file_path) :
         print(f'Error could not read CSV:\'{file_path}\'')
 
     # check if the appliances are in the index of the csv
-    if csv_df.columns. 
-:
+    for appliance in appliances :
+        if appliance not in csv_df.columns :
+            print(f'{appliance} not in the index of csv. aborting....')
+            exit(1)
+
     readings = []
+    appliance_readings = [ [] for appliance in appliances ] 
     months = []
     weekdays = []
     hours = []
@@ -86,11 +91,18 @@ def load_data(file_path) :
         # get the time and load from the csv
         time = row['time']
         reading = np.nan if pd.isna(row['main']) else row['main']
+
         # get the month, day, and hour from the time
         month = time.month - 1 # index month starts from 1 to 1 
         day = time.dayofweek
         hour = time.hour
 
+        # get the NILM data for the appliances and add it to the reading
+        # lists
+        for idx, appliance in enumerate(appliances) :
+            appliance_reading = np.nan if pd.isna(row[appliance]) else row[appliance]    
+            appliance_readings[idx].append(appliance_reading)
+                
         # add sample to our lists
         readings.append(reading)
         months.append(month)
@@ -98,4 +110,4 @@ def load_data(file_path) :
         hours.append(hour)
 
     print('Done....') 
-    return [ readings, months, weekdays, hours ]  
+    return [ readings, appliance_readings, months, weekdays, hours ]  

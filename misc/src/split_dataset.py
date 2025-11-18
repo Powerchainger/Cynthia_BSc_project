@@ -33,7 +33,7 @@ def main() :
     try :
        csv_df = pd.read_csv(file_path_read, parse_dates=['time'])
     except :
-        print(f'Error: could not read csv:\'{file_path}\'')
+        print(f'Error: could not read csv:\'{file_path_read}\'')
         exit(1)
 
     # process the dataframe 
