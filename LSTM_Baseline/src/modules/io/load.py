@@ -1,60 +1,98 @@
+import torch
+import json
 import pandas as pd
+import numpy as np
 
-from modules.io.csv_config import Csv_config 
+from modules.model.model import Forecaster as Model
 
-# loads data from a csv file:
-#   - If the data is from an individual household the output will represent
-#     the consumption from said household
-#   - If the data is from multiple household the output will represent the
-#     aggregated consumption of all households in the CSV
-#
-#   The output is in the format [ E, I, D, H ], where:
-#   E = the samples (in kWh)
-#   I = the time index for the samples (from 0 to config.sampleSize - 1)
-#   D = the day of the week corresponding to the time index (from 0 to 6)
-#   H = binary holiday mark for the time index (1 if the date is on a holiday)
-def load_data_from_csv(filePath, config):
-    print('loading csv file: ' + filePath)
-    csv_df = pd.read_csv(filePath, parse_dates=[config.dtField])
+# Function that loads the params for a model from a JSON file
+# it returns a touple containing the params with which a model
+# can be initialized
+# 
+# The touple contains:
+#  (hidden_layer_nodes, hidden_layers, time_steps) 
+def load_model_params(file_path) :
 
-    # define the range for which we load daily load profile
-    # TODO: find a way to remove freq='D' and put it in the csv_config
-    start_date = csv_df[config.dtField].min()
-    end_date = csv_df[config.dtField].max()
-    date_range = pd.date_range(start=start_date, end=end_date, freq='D')
+    try :
+        # open the file 
+        with open(file_path, 'r') as file: 
+            # read the JSON
+            data = json.load(file)
+    except :
+        print(f'Could not read model params from file:{file_path}')
+        exit(1)
+   
+    # grab the params from the JSON
+    hidden_layer_nodes = data['hidden_layer_nodes']
+    hidden_layers = data['hidden_layers']
+    time_steps = data['time_steps']
 
-    samples = []
-    time_index = []
-    weekday_index = []
-    holiday_index = []
-    for day in date_range:
-        # get all the readings that correspond to the current date
-        day_readings = csv_df[csv_df[config.dtField].dt.date == day.date()]
+    # return the params as a touple
+    return (hidden_layer_nodes, hidden_layers, time_steps)
+
+# Function that loads initializes a model according to params,
+# then it loads the weights for said model from file_path.
+# Lastly it returns the model
+def load_model(file_path, params) :
+    print(f'Loading model with params:{params} and weights from:\'{file_path}\'')
         
-        time_range = pd.date_range(
-                start=day,
-                periods=config.sampleSize,
-                freq=config.resolution)
+    #initialize the model according to the params
+    print('Initializing model....')
+    model = Model(*params)
+    print('Done....')
 
-        # initialize fields for the readings for the current day
-        current_time = 0 
-        current_weekday = day.dayofweek
-        day_holiday = is_holiday(day)
-        for time in time_range:
-            # now get all the readings that correspond to the current time
-            current_reading = day_readings[day_readings[config.dtField] == time]
+    # load the weights of the model, stored in file_path
+    # this fails if the weights saved belong to a model of different params
+    print('Loading weights....')
+    try :
+        model.load_state_dict(torch.load(file_path, weights_only=True))
+    except : 
+        print(f'Error: could not load weights for model with params:{params} from file{file_path}')
+        exit(1)
+    print('Done....')
 
-            current_usage = current_reading[config.loadField].sum()
+    return model
 
-            samples.append(current_usage)
-            time_index.append(current_time)
-            weekday_index.append(current_weekday)
-            holiday_index.append(day_holiday)
+# Function that loads data from a CSV file
+# Then formats it so it can be used as input for a model 
+# 
+# Note, the CSV file must be formatted according to the following:
+#   column 1: Time, named time
+#   column 2: Load in KWH, named main
+#
+# output format:
+#   A list containing samples, where a sample is a list of
+#       1. the current load 
+#       2. the current month of the year    from 1 to 12
+#       3. the current day of the week      from 1 to 7
+#       4. the current hour of the day      from 0 to 23 
+def load_data(file_path) :
+    print(f'Loading data from CSV:\'{file_path}\'') 
+    # open the csv
+    try :
+        csv_df = pd.read_csv(file_path, parse_dates=['time'])
+    except :
+        print(f'Error could not read CSV:\'{file_path}\'')
 
-            current_time = current_time + 1
+    readings = []
+    months = []
+    weekdays = []
+    hours = []
+    # process row by row
+    for _, row in csv_df.iterrows() :
+        # get the time and load from the csv
+        time = row['time']
+        reading = np.nan if pd.isna(row['main']) else row['main']
+        # get the month, day, and hour from the time
+        month = time.month - 1 # index month starts from 1 to 1 
+        day = time.dayofweek
+        hour = time.hour
 
-    return [ samples, time_index, weekday_index, holiday_index ]
+        # add sample to our lists
+        readings.append(reading)
+        months.append(month)
+        weekdays.append(day)
+        hours.append(hour)
 
-#TODO: implement holiday markers
-def is_holiday(day):
-    return 0 
+    print('Done....') 
+    return [ readings, months, weekdays, hours ]  

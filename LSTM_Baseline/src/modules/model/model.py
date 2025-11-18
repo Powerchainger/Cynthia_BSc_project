@@ -1,33 +1,38 @@
 import torch 
 import torch.nn as nn 
-from modules.model.model_params import Model_params 
 
-OUTPUT_DIM = 1
+# output dimension is 24, the hourly load predicted for the next day 
+_OUTPUT_DIM = 24 
 
-# class responsible for the LSTM that performs load forecasting
-class Model(nn.Module):
-    def __init__(self, config) :
-        super(Model, self).__init__()
+# input consists of load, month, day, time:
+#   load_dim    = 1
+#   month_dim   = 12
+#   day_dim     = 7
+#   time_dim    = 24  +
+#   -------------------
+#   input_dim   = 44 
+_INPUT_DIM = 44 
 
-        self.hidden_dim = config.hidden_dim
-        self.layer_dim = config.layer_dim
+# class responsible for the model that performs load forecasting
+class Forecaster(nn.Module):
+    def __init__(self, hidden_layer_nodes, hidden_layers, time_steps) :
+        super(Forecaster, self).__init__()
+
+        self.time_steps = time_steps
 
         self.lstm = nn.LSTM(
-            config.input_dim,
-            config.hidden_dim,
-            config.layer_dim,
-            batch_first=True)
+            _INPUT_DIM,
+            hidden_layer_nodes,
+            hidden_layers)
 
-        self.fc = nn.Linear(config.hidden_dim, OUTPUT_DIM)
+        self.fc = nn.Linear(hidden_layer_nodes, _OUTPUT_DIM)
 
-    def forward(self, x, h0=None, c0=None) :
-        if h0 is None or c0 is None:
-            h0 = torch.zeros(self.layer_dim, x.size(
-                0), self.hidden_dim).to(x.device)
-            c0 = torch.zeros(self.layer_dim, x.size(
-                0), self.hidden_dim).to(x.device)
+    def forward(self, x) :
 
-        out, (hn, cn) = self.lstm(x, (h0, c0))
-        #TODO: check this
+        # first run input through LSTM
+        out, _ = self.lstm(x)
+
+        # then run output of LSTM through Feed Forward Network to get our output
         out = self.fc(out[:, -1, :])
-        return out, hn, cn
+        
+        return out

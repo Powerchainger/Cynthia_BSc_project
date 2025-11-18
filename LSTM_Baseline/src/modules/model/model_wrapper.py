@@ -14,8 +14,6 @@ from modules.io.load import load_data_from_csv
 #TODO: find out if this can be done differently, it's ugly
 from modules.data_preprocessing.preprocessing import pre_process_data
 
-#TODO: make it so the target output is both normalized and un-normalized 
-
 class Model_wrapper():
     # the wrapper needs the model, its params, and a csv file and a config for
     # the csv file in order to be able to initialize the data and input matrix
@@ -31,7 +29,8 @@ class Model_wrapper():
         self._model = model
         self._train_file_path = train_file_path
         self._eval_file_path = eval_file_path
-        
+       
+        #TODO: this brings too much complexity
         self._output_scaler = {} 
         self._input_matrix = {} 
         self._targets = {} 

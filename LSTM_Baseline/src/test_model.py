@@ -1,56 +1,34 @@
 import sys
-import torch
 
-from modules.io.csv_config import Csv_config
+from modules.io.load import load_model_params, load_model, load_data
 
-from modules.model.model import Model 
-from modules.model.model_params import Model_params
+from modules.data_processing.pre_processing import pre_process
 
-from modules.model.tester import Tester 
+from modules.model.test import test_model
 
-INPUT_DIM = 57
-HIDDEN_DIM = 20
-LAYER_DIM = 2 
-LOOK_BACK = 2 
+# Program needs 3 args:
+#   1. the file_path for the model 
+#   2. the file_path for the params for the model
+#   3. the file_path for the data to test the model on
+def main() :
 
-MODEL_PATH = '../models/test.pt'
-CSV_PATH_TRAINING = '../dataset/training_data.csv'
-CSV_PATH_VALIDATION = '../dataset/validation_data.csv'
-CSV_PATH_TESTING = '../dataset/testing_data.csv'
+    if(len(sys.argv) < 4):
+        print('Error: too few arguments to run program, 3 args needed')
+        exit(1)
 
-def main():
-    # the args the module was run with, TODO: do args checking
-    #argc = len(sys.argv)
-    #argv = sys.argv
+    model_path = sys.argv[1]
+    model_params_path = sys.argv[2]
+    testing_data_path = sys.argv[3]
 
-    # filepath = argv[1]
-    # hiddenLayers = argv[2]
-    # hiddenNodes = argv[3]
-    # lookBack = argv[4]
-    # individual = argv[5] 
+    # load the model which we want to test 
+    model_params = load_model_params(model_params_path)
+    model = load_model(model_path, model_params)
 
-    csv_path = CSV_PATH_TESTING 
-    csv_config = Csv_config(
-        'READING_DATETIME',
-        ' GENERAL_SUPPLY_KWH',
-        48,
-        '30min')
+    # load the data to test the model on
+    testing_data = load_data(testing_data_path)
 
-    model_params = Model_params(
-        INPUT_DIM, # input dim   
-        HIDDEN_DIM, # nodes per hidden layer
-        LAYER_DIM,  # hidden layers
-        LOOK_BACK)  # lookback
-
-    # init the model
-    model = Model(model_params)
-   
-    # load the weights
-    model.load_state_dict(torch.load(MODEL_PATH, weights_only=True))
-
-    # test the model on the dataset
-    tester = Tester(model, model_params, csv_path, csv_config)
-    tester.run()
+    # test the model
+    test_model(model, testing_data)
 
 if __name__ == '__main__':
     main() 
