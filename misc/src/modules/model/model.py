@@ -5,22 +5,20 @@ import torch.nn as nn
 _OUTPUT_DIM = 24 
 
 # input consists of load, month, day, time:
-#   load_dim        = 1
-#   appliance_dim   = 1 for each appliance 
-#   month_dim       = 12
-#   day_dim         = 7
-#   time_dim        = 24  +
+#   load_dim    = 1
+#   month_dim   = 12
+#   day_dim     = 7
+#   time_dim    = 24  +
 #   -------------------
-#   input_dim       = 44 + 1*appliance
+#   input_dim   = 44 
 _INPUT_DIM = 44 
 
 # class responsible for the model that performs load forecasting
 class Forecaster(nn.Module):
-    def __init__(self, hidden_layer_nodes, hidden_layers, time_steps, appliance_count) :
+    def __init__(self, hidden_layer_nodes, hidden_layers, time_steps) :
         super(Forecaster, self).__init__()
 
         self.time_steps = time_steps
-        self.appliance_count = appliance_count
 
         self.lstm = nn.LSTM(
             _INPUT_DIM,

@@ -74,9 +74,6 @@ def load_data(file_path) :
     except :
         print(f'Error could not read CSV:\'{file_path}\'')
 
-    # check if the appliances are in the index of the csv
-    if csv_df.columns. 
-:
     readings = []
     months = []
     weekdays = []
