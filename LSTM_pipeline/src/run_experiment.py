@@ -56,12 +56,12 @@ def main() -> None:
         model_NILM = load_model(args.model_NILM_path, params_NILM)
     else:    
         print("Training models....")
-        model_baseline = train_model(params_baseline, training, min_max_dict, args.out_path, 'model_baseline')
+        #model_baseline = train_model(params_baseline, training, min_max_dict, args.out_path, 'model_baseline')
         model_NILM = train_model(params_NILM, training, min_max_dict, args.out_path, 'model_NILM', appliances)
     print("Done....")
     # test the models and save the results
     print("Testing models....")
-    test_model(params_baseline, model_baseline, training, testing, min_max_dict, args.out_path, 'results_baseline')
+    #test_model(params_baseline, model_baseline, training, testing, min_max_dict, args.out_path, 'results_baseline')
     test_model(params_NILM, model_NILM, training, testing, min_max_dict, args.out_path, 'results_NILM', appliances)
     print("Done....")
 

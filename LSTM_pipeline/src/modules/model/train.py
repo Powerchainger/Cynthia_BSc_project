@@ -2,6 +2,7 @@ import torch
 import optuna
 import json
 import os
+import pandas as pd
 
 from modules.io.save import save_model
 from modules.io.model_params import Model_params
@@ -31,7 +32,7 @@ def train_model(model_params, training_data, min_max_vals, out_dir, file_name, a
         error = train_one_epoch(model, X_train, Y_train, loss_function, optimizer)
 
         if (epoch + 1) % 10 == 0:
-            print(f'Epoch [{epoch + 1:3}/{epochs:3}], Loss:{loss.item():.5f}')
+            print(f'Epoch [{epoch + 1:3}/{epochs:3}], Loss:{error:.5f}')
 
     
     save_model(model, out_dir, file_name)
@@ -47,12 +48,13 @@ def train_one_epoch(model, X, Y, loss_function, optimizer):
 
     # compute loss
     loss = loss_function(Y_pred, Y)
+    error = float(loss.item())
 
     # backwards pass
     loss.backward()
     optimizer.step()
 
-    return loss.item() 
+    return error 
 
 def evaluate_model(model, X, Y, loss_function):
 
@@ -70,7 +72,7 @@ def objective(trial, training_data, validation_data, min_max_vals, appliances):
     lr = trial.suggest_float('lr', 1e-5, 1e-1, log=True)
     hidden_layers = trial.suggest_int('hidden_layers', 2, 5)
     nodes_per_layer = trial.suggest_int('nodes_per_layer', 16, 256)
-    epochs = trial.suggest_int('epochs', 10, 500)
+    epochs = trial.suggest_int('epochs', 10, 500, log)
     time_steps = trial.suggest_int('time_steps', 10, 10 + 6*24, step=24)
 
     model = Model(
@@ -97,7 +99,7 @@ def objective(trial, training_data, validation_data, min_max_vals, appliances):
         trial.report(validation_error, epoch)
 
         if trial.should_prune():
-            raise optuna.TrailPruned()
+            raise optuna.TrialPruned()
 
     final_validation_accuracy = evaluate_model(model, X_val, Y_val, loss_function)
     return final_validation_accuracy

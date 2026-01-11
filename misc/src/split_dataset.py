@@ -10,7 +10,7 @@ def split(df) :
 
     # calculate the lengths for an approximate 80%, 10%, 10% split
     total_len = len(df)
-    training_len = int(total_len * 0.8) # 80%
+    training_len = int(total_len * 0.6) # 80% TODO
     validation_len = int((total_len - training_len) / 2) # 10%
     testing_len = total_len - training_len - validation_len # 10%
 

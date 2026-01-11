@@ -12,13 +12,14 @@ from modules.model.test import test_model
 #   3. the file_path for the data to test the model on
 def main() :
 
-    if(len(sys.argv) < 4):
-        print('Error: too few arguments to run program, 3 args needed')
+    if(len(sys.argv) < 5):
+        print('Error: too few arguments to run program, 4 args needed')
         exit(1)
 
     model_path = sys.argv[1]
     model_params_path = sys.argv[2]
     testing_data_path = sys.argv[3]
+    results_saving_path = sys.argv[4]
 
     # load the model which we want to test 
     model_params = load_model_params(model_params_path)
@@ -28,7 +29,7 @@ def main() :
     testing_data = load_data(testing_data_path)
 
     # test the model
-    test_model(model, testing_data)
+    test_model(model, testing_data, results_saving_path)
 
 if __name__ == '__main__':
     main() 

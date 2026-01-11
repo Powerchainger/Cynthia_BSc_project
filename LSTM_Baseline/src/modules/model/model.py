@@ -6,19 +6,22 @@ _OUTPUT_DIM = 24
 
 # input consists of load, month, day, time:
 #   load_dim    = 1
-#   month_dim   = 12
 #   day_dim     = 7
 #   time_dim    = 24  +
 #   -------------------
 #   input_dim   = 44 
-_INPUT_DIM = 44 
+_INPUT_DIM = 32  
 
+_TIMESTEPS_DAY_0 = 10
+_TIMESTEPS_PER_DAY = 24
 # class responsible for the model that performs load forecasting
 class Forecaster(nn.Module):
-    def __init__(self, hidden_layer_nodes, hidden_layers, time_steps) :
+    def __init__(self, hidden_layer_nodes, hidden_layers, input_days, learning_rate, epochs) :
         super(Forecaster, self).__init__()
 
-        self.time_steps = time_steps
+        self.time_steps = _TIMESTEPS_DAY_0 + _TIMESTEPS_PER_DAY * input_days
+        self.lr = learning_rate 
+        self.epochs = epochs
 
         self.lstm = nn.LSTM(
             _INPUT_DIM,

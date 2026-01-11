@@ -25,10 +25,11 @@ def load_model_params(file_path) :
     # grab the params from the JSON
     hidden_layer_nodes = data['hidden_layer_nodes']
     hidden_layers = data['hidden_layers']
-    time_steps = data['time_steps']
-
+    input_days = data['input_days']
+    learning_rate = data['learning_rate']
+    epochs = data['epochs']
     # return the params as a touple
-    return (hidden_layer_nodes, hidden_layers, time_steps)
+    return (hidden_layer_nodes, hidden_layers, input_days, learning_rate, epochs)
 
 # Function that loads initializes a model according to params,
 # then it loads the weights for said model from file_path.
@@ -73,26 +74,13 @@ def load_data(file_path) :
         csv_df = pd.read_csv(file_path, parse_dates=['time'])
     except :
         print(f'Error could not read CSV:\'{file_path}\'')
+        exit(1)
 
-    readings = []
-    months = []
-    weekdays = []
-    hours = []
-    # process row by row
-    for _, row in csv_df.iterrows() :
-        # get the time and load from the csv
-        time = row['time']
-        reading = np.nan if pd.isna(row['main']) else row['main']
-        # get the month, day, and hour from the time
-        month = time.month - 1 # index month starts from 1 to 1 
-        day = time.dayofweek
-        hour = time.hour
+    # turn all non available values into nans
+    csv_df.loc[pd.isna(csv_df['main']), 'main'] = np.nan
 
-        # add sample to our lists
-        readings.append(reading)
-        months.append(month)
-        weekdays.append(day)
-        hours.append(hour)
+    dates = list(csv_df['time'])
+    readings = list(csv_df['main'])
 
     print('Done....') 
-    return [ readings, months, weekdays, hours ]  
+    return [ readings, dates ]  

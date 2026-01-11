@@ -13,23 +13,26 @@ from modules.model.model import Forecaster as Model
 #  (hidden_layer_nodes, hidden_layers, time_steps) 
 def load_model_params(file_path) :
 
-    #try :
+    try :
         # open the file 
-    with open(file_path, 'r') as file: 
+        with open(file_path, 'r') as file: 
             # read the JSON
-        data = json.load(file)
-    #except :
-    #    print(f'Could not read model params from file:{file_path}')
-    #    exit(1)
+            data = json.load(file)
+    except :
+        print(f'Could not read model params from file:{file_path}')
+        exit(1)
    
     # grab the params from the JSON
     hidden_layer_nodes = data['hidden_layer_nodes']
     hidden_layers = data['hidden_layers']
-    time_steps = data['time_steps']
+    input_days = data['input_days']
+    learning_rate = data['learning_rate']
+    epochs = data['epochs']
+    # for NILM
     appliances = data['appliances'] # array
 
     # return the params as a touple
-    return (hidden_layer_nodes, hidden_layers, time_steps), appliances
+    return (hidden_layer_nodes, hidden_layers, input_days, learning_rate, epochs), appliances
 
 # Function that loads initializes a model according to params,
 # then it loads the weights for said model from file_path.
@@ -74,6 +77,7 @@ def load_data(file_path, appliances) :
         csv_df = pd.read_csv(file_path, parse_dates=['time'])
     except :
         print(f'Error could not read CSV:\'{file_path}\'')
+        exit(1)
 
     # check if the appliances are in the index of the csv
     for appliance in appliances :
@@ -81,33 +85,16 @@ def load_data(file_path, appliances) :
             print(f'{appliance} not in the index of csv. aborting....')
             exit(1)
 
-    readings = []
-    appliance_readings = [ [] for appliance in appliances ] 
-    months = []
-    weekdays = []
-    hours = []
-    # process row by row
-    for _, row in csv_df.iterrows() :
-        # get the time and load from the csv
-        time = row['time']
-        reading = np.nan if pd.isna(row['main']) else row['main']
+    csv_df.loc[pd.isna(csv_df['main']), 'main'] = np.nan
+    for appliance in appliances :
+        csv_df.loc[pd.isna(csv_df[appliance]), appliance] = 0.0 # if an appliance is nan we count it as 0
 
-        # get the month, day, and hour from the time
-        month = time.month - 1 # index month starts from 1 to 1 
-        day = time.dayofweek
-        hour = time.hour
+    dates = list(csv_df['time'])
+    main = list(csv_df['main'])
+    appliance_readings = [ list(csv_df[appliance]) for appliance in appliances ]  
 
-        # get the NILM data for the appliances and add it to the reading
-        # lists
-        for idx, appliance in enumerate(appliances) :
-            appliance_reading = np.nan if pd.isna(row[appliance]) else row[appliance]    
-            appliance_readings[idx].append(appliance_reading)
-                
-        # add sample to our lists
-        readings.append(reading)
-        months.append(month)
-        weekdays.append(day)
-        hours.append(hour)
+    print('Done....')
 
-    print('Done....') 
-    return [ readings, appliance_readings, months, weekdays, hours ]  
+    return [ main, appliance_readings, dates]
+
+

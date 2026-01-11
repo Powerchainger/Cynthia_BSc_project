@@ -7,22 +7,25 @@ _OUTPUT_DIM = 24
 # input consists of load, month, day, time:
 #   load_dim        = 1
 #   appliance_dim   = 1 for each appliance 
-#   month_dim       = 12
 #   day_dim         = 7
-#   time_dim        = 24  +
+#   time_dim        = 1
 #   -------------------
 #   input_dim       = 44 + 1*appliance
-_INPUT_DIM = 44
+_INPUT_DIM = 32
 
 # currently binary
 _APPLIANCE_INPUT_DIM = 1
 
-# class responsible for the model that performs load forecasting
+_TIMESTEPS_DAY_0 = 10
+_TIMESTEPS_PER_DAY = 24 # class responsible for the model that performs load forecasting
 class Forecaster(nn.Module):
-    def __init__(self, hidden_layer_nodes, hidden_layers, time_steps, appliance_count) :
+    def __init__(self, hidden_layer_nodes, hidden_layers, input_days, learning_rate, epochs, appliance_count) :
         super(Forecaster, self).__init__()
 
-        self.time_steps = time_steps
+        self.time_steps = _TIMESTEPS_DAY_0 + _TIMESTEPS_PER_DAY * input_days
+        self.lr = learning_rate
+        self.epochs = epochs
+
         self.appliance_count = appliance_count
 
         input_dim = _INPUT_DIM + appliance_count * _APPLIANCE_INPUT_DIM
