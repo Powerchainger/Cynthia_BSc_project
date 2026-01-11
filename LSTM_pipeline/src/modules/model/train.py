@@ -64,15 +64,16 @@ def evaluate_model(model, X, Y, loss_function):
 
     # compute loss
     loss = loss_function(Y_pred, Y)
+    error = float(loss.item())
 
-    return loss.item()
+    return error 
 
 def objective(trial, training_data, validation_data, min_max_vals, appliances):
     
     lr = trial.suggest_float('lr', 1e-5, 1e-1, log=True)
     hidden_layers = trial.suggest_int('hidden_layers', 2, 5)
     nodes_per_layer = trial.suggest_int('nodes_per_layer', 16, 256)
-    epochs = trial.suggest_int('epochs', 10, 500, log)
+    epochs = trial.suggest_int('epochs', 10, 500)
     time_steps = trial.suggest_int('time_steps', 10, 10 + 6*24, step=24)
 
     model = Model(
