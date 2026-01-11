@@ -15,7 +15,7 @@ def objective(trial, training_data, validation_data):
     lr = trial.suggest_float("lr", 1e-5, 1e-1, log=True)
     #optimizer_name = trial.suggest_categorical("optimizer", ["Adam", "AdamW", "RMSprop"])
     num_layers = trial.suggest_int("num_layers", 2, 5)
-    num_epochs = trial.suggest_int("num_epochs", 10, 300)
+    num_epochs = trial.suggest_int("num_epochs", 10, 500)
     hidden_dim = trial.suggest_int("hidden_dim", 16, 256, log=True)
     input_days = trial.suggest_int("time steps (days)", 0, 7)
 
