@@ -1,8 +1,6 @@
 {
     "csv_path": "../data/UK-DALE/avg_kwh_hourly/house_2/house_2.csv",
     "out_path": "out/UK_DALE_house_2/",
-    "load_params": true,
-    "params_baseline_path": "out/UK_DALE_house_2/model_parameters/params_baseline.json",
-    "params_NILM_path": "out/UK_DALE_house_2/model_parameters/params_NILM.json",
+    "load_params": false,
     "load_models": false
 }
