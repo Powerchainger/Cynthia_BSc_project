@@ -1,6 +1,4 @@
 import os
-import matplotlib
-matplotlib.use('TKAgg')
 import matplotlib.pyplot as plt
 
 
