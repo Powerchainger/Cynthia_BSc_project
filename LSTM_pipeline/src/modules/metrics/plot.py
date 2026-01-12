@@ -26,7 +26,7 @@ def create_plot_per_day(Y_pred, Y, dates, out_dir):
     while idx < length: 
         head = dates[idx][0]
         _plot_day(Y_pred[idx], Y[idx], head, save_path)
-        idx = idx + 24
+        idx = idx + 24 #WRONG
 
 def _plot_day(Y_pred, Y, date, save_path) : 
 
@@ -53,3 +53,17 @@ def _plot_day(Y_pred, Y, date, save_path) :
     plt.savefig(save_path, dpi=300)
     plt.close()
 
+def create_EVO_plots(Y_pred, Y, dates, out_dir):
+    # find first day
+    assert(len(Y_pred) == len(Y))
+    assert(len(Y_pred) == len(dates))
+    assert(len(Y) == len(dates))
+
+    idx = find_next_full_day_from_results(dates)
+    while idx < len(Y_pred):
+        day_Y_pred = Y_pred[idx]
+        day_Y = Y_pred[idx]
+        date = dates[idx][0]
+
+        _plot_day(day_Y_pred, day_Y, date, save_path)
+        idx = find_next_full_day_from_results(dates, idx+1)

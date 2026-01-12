@@ -7,7 +7,7 @@ from modules.data_processing.pre_processing import pre_process
 DAY_LEN = 24
 DAY_CUTOFF = 10
 
-#TODO: type suggestions
+#TODO: type suggestions, should probably be a member function for the model itself ngl
 def create_input_matrix(df, appliances, min_max_dict, time_steps):
 
     targets = np.array(df['main'])

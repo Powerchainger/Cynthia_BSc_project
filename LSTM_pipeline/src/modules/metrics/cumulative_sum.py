@@ -24,7 +24,7 @@ def _filter_weekdays(Y_pred, Y, dates):
     while idx < length:
         head = dates[idx][0]
         weekday = head.weekday() 
-        next_day = idx + 24
+        next_day = idx + 24 # not true gottem!!!!
         
         day_pred = Y_pred[idx]
         day = Y[idx]

@@ -3,16 +3,18 @@ import os
 
 from modules.model.model import Forecaster as Model 
 
+from modules.io.save import save_values
+
 from modules.data_processing.input_matrix import create_input_matrix
 from modules.data_processing.pre_processing import pre_process
 
-from modules.metrics.plot import create_plot_per_day
+from modules.metrics.plot import create_plot_per_day, create_EVO_plots
 from modules.metrics.error import compute_value_metrics
 from modules.metrics.partial_dependence import plot_partial_dependence
 from modules.metrics.cumulative_sum import plot_cumulative_sum_results, create_weekday_plots
 
 
-def test_model(model_params, model, training_data, testing_data, min_max_dict, out_dir, results_name, appliances=[]):
+def test_model(model_params, model, testing_data, min_max_dict, out_dir, results_name, appliances=[]):
     
     #prepare input, 
     time_steps = model.time_steps
@@ -36,3 +38,18 @@ def test_model(model_params, model, training_data, testing_data, min_max_dict, o
     # 6. RMSE, MAPE,
     compute_value_metrics(Y_pred, Y, results_path)
 
+def EVO_pilot_test_model(model_params, model, testing_data, min_max_dict, out_dir, results_name):
+    
+    time_steps = model.time_steps
+    X, Y, dates = create_input_matrix(testing_data, [], min_max_dict, time_steps)
+
+    model.eval()
+    with torch.no_grad():
+        Y_pred = model(X)
+    
+    results_path = out_dir + '/' + results_name + '/'
+    os.makedirs(results_path, exist_ok=True)
+
+    create_EVO_plots(Y_pred, Y, dates, results_path)
+    compute_value_metrics(Y_pred, Y, results_path) 
+    save_values(Y_pred, Y, results_path)

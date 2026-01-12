@@ -61,8 +61,8 @@ def main() -> None:
     print("Done....")
     # test the models and save the results
     print("Testing models....")
-    test_model(params_baseline, model_baseline, training, testing, min_max_dict, args.out_path, 'results_baseline')
-    test_model(params_NILM, model_NILM, training, testing, min_max_dict, args.out_path, 'results_NILM', appliances)
+    test_model(params_baseline, model_baseline, testing, min_max_dict, args.out_path, 'results_baseline')
+    test_model(params_NILM, model_NILM, testing, min_max_dict, args.out_path, 'results_NILM', appliances)
     print("Done....")
 
 if __name__ == '__main__':
