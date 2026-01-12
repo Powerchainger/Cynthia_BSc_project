@@ -20,7 +20,7 @@ def load_data(file_path: str) -> tuple[DF, DF, DF, [str]]:
 
     return (split_dataset(csv_df), appliances, _create_min_max_dictionary(csv_df))
 
-def split_dataset(df: DF, ratio: float=0.8) -> tuple[DF, DF, DF]:
+def split_dataset(df: DF, ratio: float=0.6) -> tuple[DF, DF, DF]:
     """helper function for load_data, splits the dataframe into an 80, 10, 10 split for the training, validation, and testing data respectively."""
     assert(ratio > 0 and ratio < 1)
 

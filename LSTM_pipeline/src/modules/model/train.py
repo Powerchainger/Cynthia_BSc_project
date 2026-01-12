@@ -111,7 +111,7 @@ def hyper_parameter_tuning(training_data, validation_data, min_max_vals, out_dir
             direction='minimize', # minimize the validation error
             pruner=optuna.pruners.MedianPruner()
     )
-    study.optimize(lambda trial: objective(trial, training_data, validation_data, min_max_vals, appliances), n_trials=500)
+    study.optimize(lambda trial: objective(trial, training_data, validation_data, min_max_vals, appliances), n_trials=1000)
 
     model_param_dict = dict(study.best_trial.params)
     model_param_dict['min_y'] = min_max_vals['main'][0]
