@@ -1,5 +1,12 @@
 import sys
 
+from modules.io.args import Args
+from modules.io.model_params import Model_params
+from modules.io.load import load_data, load_model
+
+from modules.model.train import train_model, hyper_parameter_tuning
+from modules.model.test import EVO_pilot_test_model as test_model
+
 def main() -> None:
     # read the data, 0.6/0.2/0.2 split 
     # the last 0.2 will probably be around a week of time for the predictions
