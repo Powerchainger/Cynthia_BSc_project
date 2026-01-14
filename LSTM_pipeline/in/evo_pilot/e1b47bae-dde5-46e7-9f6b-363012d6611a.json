@@ -1,0 +1,1 @@
+{ "csv_path" : "../data/EVO_PC_pilot/avg_kwh_hourly/e1b47bae-dde5-46e7-9f6b-363012d6611a.csv", "out_path" : "out/EVO_pilot/e1b47bae-dde5-46e7-9f6b-363012d6611a/", "load_params" : false, "load_models" : false }

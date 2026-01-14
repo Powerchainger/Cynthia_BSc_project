@@ -66,8 +66,9 @@ def create_EVO_plots(Y_pred, Y, dates, out_dir):
 
     idx = find_next_day_from_results(dates)
     while idx < len(Y_pred):
+        print(idx)
         day_Y_pred = Y_pred[idx]
-        day_Y = Y_pred[idx]
+        day_Y = Y[idx]
         date = dates[idx][0]
 
         _plot_day(day_Y_pred, day_Y, date, save_path)
