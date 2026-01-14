@@ -52,4 +52,4 @@ def EVO_pilot_test_model(model_params, model, testing_data, min_max_dict, out_di
 
     create_EVO_plots(Y_pred, Y, dates, results_path)
     compute_value_metrics(Y_pred, Y, results_path) 
-    save_values(Y_pred, Y, results_path)
+    save_values(Y_pred, Y, dates, results_path)
