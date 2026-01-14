@@ -71,9 +71,9 @@ def evaluate_model(model, X, Y, loss_function):
 def objective(trial, training_data, validation_data, min_max_vals, appliances):
     
     lr = trial.suggest_float('lr', 1e-5, 1e-1, log=True)
-    hidden_layers = trial.suggest_int('hidden_layers', 2, 5)
-    nodes_per_layer = trial.suggest_int('nodes_per_layer', 16, 256)
-    epochs = trial.suggest_int('epochs', 10, 500)
+    hidden_layers = trial.suggest_int('hidden_layers', 2, 4)
+    nodes_per_layer = trial.suggest_int('nodes_per_layer', 100, 256)
+    epochs = trial.suggest_int('epochs', 10, 500, log=True)
     time_steps = trial.suggest_int('time_steps', 10, 10 + 6*24, step=24)
 
     model = Model(
@@ -111,7 +111,7 @@ def hyper_parameter_tuning(training_data, validation_data, min_max_vals, out_dir
             direction='minimize', # minimize the validation error
             pruner=optuna.pruners.MedianPruner()
     )
-    study.optimize(lambda trial: objective(trial, training_data, validation_data, min_max_vals, appliances), n_trials=1000)
+    study.optimize(lambda trial: objective(trial, training_data, validation_data, min_max_vals, appliances), n_trials=50)
 
     model_param_dict = dict(study.best_trial.params)
     model_param_dict['min_y'] = min_max_vals['main'][0]
