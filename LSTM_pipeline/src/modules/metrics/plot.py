@@ -64,7 +64,7 @@ def create_EVO_plots(Y_pred, Y, dates, out_dir):
     save_path = out_dir + '/plots/'
     os.makedirs(save_path, exist_ok=True)
 
-    idx = find_next_full_day_from_results(dates)
+    idx = find_next_day_from_results(dates)
     while idx < len(Y_pred):
         day_Y_pred = Y_pred[idx]
         day_Y = Y_pred[idx]
