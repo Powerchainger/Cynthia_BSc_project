@@ -35,8 +35,8 @@ def _filter_overlap(Y_pred, Y, dates):
 
     idx = find_next_day_from_results(dates)
     while idx < len(Y_pred):
-        new_Y_pred = new_Y_pred + Y_pred[idx]
-        new_Y = new_Y + Y[idx]
+        new_Y_pred = new_Y_pred + Y_pred[idx].tolist()
+        new_Y = new_Y + Y[idx].tolist()
         new_dates = new_dates + dates[idx]
         idx = find_next_day_from_results(dates, idx + 1)
 
