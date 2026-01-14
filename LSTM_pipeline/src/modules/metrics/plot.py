@@ -4,7 +4,7 @@ import os
 import numpy as np
 import pandas as pd
 
-from modules.misc.utils import find_next_full_day_from_results
+from modules.misc.utils import find_next_day_from_results
 
 def find_start(dates):
 
@@ -71,4 +71,4 @@ def create_EVO_plots(Y_pred, Y, dates, out_dir):
         date = dates[idx][0]
 
         _plot_day(day_Y_pred, day_Y, date, save_path)
-        idx = find_next_full_day_from_results(dates, idx+1)
+        idx = find_next_day_from_results(dates, idx+1)
