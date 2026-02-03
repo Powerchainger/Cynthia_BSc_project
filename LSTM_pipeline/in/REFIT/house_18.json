@@ -7,5 +7,5 @@
         "load_models": false,
         "model_baseline_path": "out/REFIT/house_18/models/model_baseline.pt",
         "model_NILM_path": "out/REFIT/house_18/models/model_NILM.pt",
-        "time_steps": 457
+        "time_steps": 363 
 }
