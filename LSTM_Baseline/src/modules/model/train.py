@@ -27,7 +27,7 @@ def train_model(model_params, training_data, validation_data) :
     # initialize optimizer and loss function
     loss_function = torch.nn.SmoothL1Loss()
     optimizer = torch.optim.Adam(model.parameters(), lr=model.lr)
-
+    print(f'Size of X_train:{len(X_train)}')
     epochs = model.epochs
     for epoch in range(epochs) :
         for phase in ['train', 'validate'] :

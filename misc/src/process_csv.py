@@ -7,6 +7,11 @@ import numpy as np
 def process(df) :
 
     # create a new df with the same columns as the previous one
+    # SPECIFIC FOR REFIT HERE
+    # df = df.drop('Unix', axis=1)
+    # df = df.rename(columns=str.lower)
+    # df = df.rename(columns={'aggregate': 'main'})
+    # SPECIFIC FOR REFIT DONE
     new_df = pd.DataFrame(columns=df.columns)
 
     # time series by hour, assumes complete data 
@@ -23,7 +28,7 @@ def process(df) :
         end = hr + pd.Timedelta(hours=1) 
         time_mask = (df['time'] >= begin) & (df['time'] < end)
         
-        # all the readings from hr - 30 mins to hr + 30 mins
+        # all the readings from hr to hr + 60 mins
         readings = df[time_mask].loc[:, df.columns != 'time']
         # drop the readings with nan in the main 
         readings = readings.dropna(subset = ['main'])

@@ -7,6 +7,8 @@ from modules.io.load import load_data, load_model
 from modules.model.train import train_model, hyper_parameter_tuning
 from modules.model.test import test_model
 
+from modules.metrics.plot import running_loss_plot
+
 def main() -> None:
     """ The pipeline to perform experiments needed for Cynthia's Bachelor's Thesis
     
@@ -38,30 +40,36 @@ def main() -> None:
     (training, validation, testing), appliances, min_max_dict = load_data(args.csv_path)
     print("Done....") 
 
-    # load params, or perform hyperparam tuning
     if (args.load_params):
         print("Loading model parameters from file....")
         params_baseline = Model_params(args.params_baseline_path)
         params_NILM = Model_params(args.params_NILM_path)
     else:
-        print("computing model parameters from hyper parameter tuning....")
-        params_baseline = hyper_parameter_tuning(training, validation, min_max_dict, args.out_path, 'params_baseline')
-        params_NILM = hyper_parameter_tuning(training, validation, min_max_dict, args.out_path, 'params_NILM', appliances)
+        print("computing model parameters from hyper parameter tuning for baseline....")
+        params_baseline = hyper_parameter_tuning(training, validation, min_max_dict, args.out_path, 'params_baseline', args.time_steps)
+        print("Done....")
+        print("Computing model parameters from hyper parameter tuning for NILM....")
+        params_NILM = hyper_parameter_tuning(training, validation, min_max_dict, args.out_path, 'params_NILM', args.time_steps, appliances)
 
     print("Done....")
-    # train the baseline and the NILM models or load the models
+
     if (args.load_models):
         print("Loading models from file....")
         model_baseline = load_model(args.model_baseline_path, params_baseline)     
         model_NILM = load_model(args.model_NILM_path, params_NILM)
     else:    
-        print("Training models....")
-        model_baseline = train_model(params_baseline, training, min_max_dict, args.out_path, 'model_baseline')
-        model_NILM = train_model(params_NILM, training, min_max_dict, args.out_path, 'model_NILM', appliances)
+        print("Training baseline model....")
+        model_baseline, baseline_val_loss = train_model(params_baseline, training, validation, min_max_dict, args.out_path, 'model_baseline')
+        print("Done....")
+        print("Training NILM model....")
+        model_NILM, NILM_val_loss = train_model(params_NILM, training, validation, min_max_dict, args.out_path, 'model_NILM', appliances)
+        running_loss_plot(baseline_val_loss, NILM_val_loss, args.out_path)
     print("Done....")
-    # test the models and save the results
-    print("Testing models....")
+    
+    print("Testing baseline model....")
     test_model(params_baseline, model_baseline, testing, min_max_dict, args.out_path, 'results_baseline')
+    print("Done....")
+    print("Testing NILM model....")
     test_model(params_NILM, model_NILM, testing, min_max_dict, args.out_path, 'results_NILM', appliances)
     print("Done....")
 

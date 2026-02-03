@@ -4,7 +4,7 @@
     "load_params": true,
     "params_baseline_path": "out/EVO_pilot/157ba7cd-a46f-4d75-a6c0-a59dc570eb34/model_parameters/params.json",
     "params_NILM_path": "",
-    "load_models": true,
+    "load_models": false,
     "model_baseline_path": "out/EVO_pilot/157ba7cd-a46f-4d75-a6c0-a59dc570eb34/models/model.pt",
     "model_NILM_path": ""
 }

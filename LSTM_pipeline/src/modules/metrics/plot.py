@@ -6,14 +6,6 @@ import pandas as pd
 
 from modules.misc.utils import find_next_day_from_results
 
-def find_start(dates):
-
-    idx = 0
-    while idx < len(dates) and dates[idx][0].time() != pd.to_datetime('00:00').time():
-        idx = idx + 1
-    
-    return idx
-
 def create_plot_per_day(Y_pred, Y, dates, out_dir):
 
     save_path = out_dir + '/daily_plots/'
@@ -24,11 +16,11 @@ def create_plot_per_day(Y_pred, Y, dates, out_dir):
     assert(len(Y) == len(dates))
     length = len(Y_pred) 
 
-    idx = find_start(dates) 
+    idx = find_next_day_from_results(dates)
     while idx < length: 
         head = dates[idx][0]
         _plot_day(Y_pred[idx], Y[idx], head, save_path)
-        idx = idx + 24 #WRONG
+        idx = find_next_day_from_results(dates, idx+1)
 
 def _plot_day(Y_pred, Y, date, save_path) : 
 
@@ -66,10 +58,22 @@ def create_EVO_plots(Y_pred, Y, dates, out_dir):
 
     idx = find_next_day_from_results(dates)
     while idx < len(Y_pred):
-        print(idx)
         day_Y_pred = Y_pred[idx]
         day_Y = Y[idx]
         date = dates[idx][0]
 
         _plot_day(day_Y_pred, day_Y, date, save_path)
         idx = find_next_day_from_results(dates, idx+1)
+
+def running_loss_plot(baseline_loss, NILM_loss, out_dir):
+    save_path = out_dir + '/loss_plot.png'
+
+    fig, ax = plt.subplots()
+
+    ax.plot(baseline_loss, '-', color='r', label='Baseline loss')
+    ax.plot(NILM_loss, '-', color='b', label='NILM loss')
+    ax.legend()
+
+    plt.suptitle('loss')
+    plt.savefig(save_path, dpi=300)
+    plt.close()

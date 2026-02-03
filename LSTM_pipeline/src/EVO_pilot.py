@@ -37,7 +37,7 @@ def main() -> None:
         model = load_model(args.model_baseline_path, params)
     else:
         print('Training model....')
-        model = train_model(params, training, min_max_dict, args.out_path, 'model')
+        model, _ = train_model(params, training, validation, min_max_dict, args.out_path, 'model')
     print('Done....')
 
     print('Testing model....')

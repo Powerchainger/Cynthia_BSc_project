@@ -29,9 +29,9 @@ def split_dataset(df: DF, ratio: float=0.6) -> tuple[DF, DF, DF]:
     validation_end = training_end + int((data_len - training_end) / 2)
     testing_end = data_len
 
-    training = df.iloc[0:training_end]
-    validation = df.iloc[training_end:validation_end]
-    testing = df.iloc[validation_end:testing_end]
+    training = df.iloc[0:training_end].reset_index(drop=True)
+    validation = df.iloc[training_end:validation_end].reset_index(drop=True)
+    testing = df.iloc[validation_end:testing_end].reset_index(drop=True)
 
     return (training, validation, testing)
 

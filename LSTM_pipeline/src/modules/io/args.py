@@ -32,10 +32,13 @@ class Args:
 
             self.load_params = data['load_params']
             self.load_models = data['load_models']
+
             
             if(self.load_params) :
                 self.params_baseline_path = data['params_baseline_path']
                 self.params_NILM_path = data['params_NILM_path']
+            else:   
+                self.time_steps = data['time_steps']
 
             if(self.load_models) :
                 self.model_baseline_path = data['model_baseline_path']

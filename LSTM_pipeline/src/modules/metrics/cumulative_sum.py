@@ -1,9 +1,9 @@
 import os
 import matplotlib.pyplot as plt
-
-
 import numpy as np
 import pandas as pd
+
+from modules.misc.utils import find_next_day_from_results
 
 #TODO type suggestions
 
@@ -15,22 +15,17 @@ def _filter_weekdays(Y_pred, Y, dates):
     length = len(Y_pred)
 
     weekdays = [ [] for x in range(0,7) ]
-    idx = 0
-    while idx < length and dates[idx][0].time() != pd.to_datetime('00:00').time():
-    
-        idx = idx + 1
 
-    # idx now points to first midnight
+    idx = find_next_day_from_results(dates) 
     while idx < length:
         head = dates[idx][0]
         weekday = head.weekday() 
-        next_day = idx + 24 # not true gottem!!!!
         
         day_pred = Y_pred[idx]
         day = Y[idx]
         weekdays[weekday].append((day_pred, day))
 
-        idx = next_day
+        idx = find_next_day_from_results(dates, idx+1) 
 
     return weekdays
 
@@ -80,13 +75,8 @@ def plot_cumulative_sum_results(Y_pred, Y, dates, out_dir):
     save_path = out_dir + '/cumulative_sum/' 
     os.makedirs(save_path, exist_ok=True)
     
-    # 2. filter the weekdays
     weekdays = _filter_weekdays(Y_pred, Y, dates)
-    # 3. compute cumalitive sum
     total_cum_sum, avg_cum_sum = _compute_cumulative_sum(weekdays)
-    # 4. save values, plot values
-    #save_values(total_cum_sum, save_path, 'total')
-    #save_values(avg_cum_sum, save_path, 'average')
 
     _plot_cumulative_sum(*total_cum_sum, save_path, 'total')
     _plot_cumulative_sum(*avg_cum_sum, save_path, 'average')
