@@ -46,7 +46,7 @@ def main() -> None:
         #params_NILM = Model_params(args.params_NILM_path)
     else:
         print("computing model parameters from hyper parameter tuning for baseline....")
-        params_baseline = hyper_parameter_tuning(training, validation, min_max_dict, args.out_path, args.time_steps, 'params_baseline')
+        params_baseline = hyper_parameter_tuning(training, validation, min_max_dict, args.out_path, 'params_baseline', args.time_steps)
         print("Done....")
         print("Computing model parameters from hyper parameter tuning for NILM....")
         #params_NILM = hyper_parameter_tuning(training, validation, min_max_dict, args.out_path, 'params_NILM', appliances)
