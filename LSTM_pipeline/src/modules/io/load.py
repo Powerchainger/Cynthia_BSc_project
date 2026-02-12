@@ -46,7 +46,8 @@ def _create_min_max_dictionary(df):
         col_max = np.nanmax(df[col])
         
         min_max_dict[col] = (col_min, col_max)
-
+    
+    print(min_max_dict)
     return min_max_dict
 
 

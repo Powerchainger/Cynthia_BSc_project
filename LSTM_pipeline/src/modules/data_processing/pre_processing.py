@@ -3,7 +3,9 @@ from sklearn.preprocessing import MinMaxScaler
 
 type DF = pandas.DataFrame
 type arr = numpy.ndarray
+
 #TODO: document and type suggestions
+
 def _as_samples(readings, appliances_readings, weekdays, hours):
     
     samples = [ np.concatenate((main, day, hour)) for (main, day, hour) in zip (readings, weekdays, hours) ]
