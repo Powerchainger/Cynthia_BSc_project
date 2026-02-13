@@ -12,22 +12,22 @@ def plot_partial_dependence(model, data, appliances, min_max_dict, out_dir):
 
     # pdp for day of the week
     plot_pdp_categorical(
-            feature_labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-            pdp = weekday_pdp(model, data, appliances, min_max_dict),
-            feature_name = 'Weekday',
-            out_dir = plot_path 
-    )
+        feature_labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        pdp = weekday_pdp(model, data, appliances, min_max_dict),
+        feature_name = 'Weekday',
+        out_dir = plot_path 
+    ) 
 
     # pdp for the hour of the day
     plot_pdp_categorical(
-            feature_labels = list(range(0,24)),
-            pdp = hour_pdp(model, data, appliances, min_max_dict),
-            feature_name = 'Hour of the day',
-            out_dir = plot_path
+        feature_labels = list(range(0,24)),
+        pdp = hour_pdp(model, data, appliances, min_max_dict),
+        feature_name = 'Hour of the day',
+        out_dir = plot_path
     )
                         
     for feature in ['main'] + appliances:
-        n = 50
+        n = 50 
         range_to_test = np.arange(
             start=data[feature].min(),
             stop= data[feature].max(),
@@ -66,8 +66,7 @@ def plot_pdp_categorical(feature_labels, pdp, feature_name, out_dir):
 # numerical features
 def usage_pdp(model, feature, feature_range, data, appliances, min_max_dict):
     pdp = []
-    copy = data.copy()
-
+    copy = data.copy().dropna().reset_index(drop=True)
     for val in feature_range:
         copy[feature] = val
         
@@ -75,7 +74,7 @@ def usage_pdp(model, feature, feature_range, data, appliances, min_max_dict):
         model.eval()
         with torch.no_grad():
             Y_pred = model(X)
-
+    
         pdp.append(Y_pred.sum() / len(Y_pred))
 
     return pdp

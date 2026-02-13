@@ -1,1 +1,0 @@
-{"lr": 0.005384699865038734, "beta_1": 0.7900410730642543, "eps": 5.70467223178939e-09, "min_y": 136.24761904761905, "max_y": 1908.4928366762176, "hidden_layers": 2, "nodes_per_layer": 200, "epochs": 150, "time_steps": 154, "appliance_amount": 5}
