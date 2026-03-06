@@ -43,35 +43,29 @@ def main() -> None:
     if (args.load_params):
         print("Loading model parameters from file....")
         params_baseline = Model_params(args.params_baseline_path)
-        #params_NILM = Model_params(args.params_NILM_path)
     else:
         print("computing model parameters from hyper parameter tuning for baseline....")
         params_baseline = hyper_parameter_tuning(training, validation, min_max_dict, args.out_path, 'params_baseline', args.time_steps)
-        print("Done....")
-        print("Computing model parameters from hyper parameter tuning for NILM....")
-        #params_NILM = hyper_parameter_tuning(training, validation, min_max_dict, args.out_path, 'params_NILM', appliances)
 
     print("Done....")
 
     if (args.load_models):
         print("Loading models from file....")
         model_baseline = load_model(args.model_baseline_path, params_baseline)     
-        #model_NILM = load_model(args.model_NILM_path, params_NILM)
     else:    
         print("Training baseline model....")
         model_baseline, baseline_val_loss = train_model(params_baseline, training, validation, min_max_dict, args.out_path, 'model_baseline')
-        print("Done....")
-        print("Training NILM model....")
-        #model_NILM, NILM_val_loss = train_model(params_NILM, training, validation, min_max_dict, args.out_path, 'model_NILM', appliances)
-        running_loss_plot(baseline_val_loss, baseline_val_loss, args.out_path)
-    print("Done....")
-    
-    print("Testing baseline model....")
+    print("Done....") 
+
+    print("Testing baseline model for predicting the aggregate....")
     test_model(params_baseline, model_baseline, testing, min_max_dict, args.out_path, 'results_baseline')
     print("Done....")
-    #print("Testing NILM model....")
-    #test_model(params_NILM, model_NILM, testing, min_max_dict, args.out_path, 'results_NILM', appliances)
-    #print("Done....")
+    print("Testing baseline models for aggregating the forecasts")
+    test_aggregate_models()
+    print("Done....")
+    print("Testing NILM models for aggregating the forecasts")
+    test_aggregate_models()
+    print("Done....")
 
 if __name__ == '__main__':
     main()

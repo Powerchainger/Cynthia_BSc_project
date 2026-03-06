@@ -28,19 +28,19 @@ def test_model(model_params, model, testing_data, min_max_dict, out_dir, results
     results_path = out_dir + '/' + results_name + '/' 
     os.makedirs(results_path, exist_ok=True)
     # 2. create cum_sum 
-    plot_cumulative_sum_results(Y_pred, Y, dates, results_path)  
+    #plot_cumulative_sum_results(Y_pred, Y, dates, results_path)  
     # 3. create pdp,
-    plot_partial_dependence(model, testing_data, appliances, min_max_dict, results_path) 
+    #plot_partial_dependence(model, testing_data, appliances, min_max_dict, results_path) 
     # 4. create all plots,
-    create_plot_per_day(Y_pred, Y, dates, results_path) 
+    #create_plot_per_day(Y_pred, Y, dates, results_path) 
     # 5. create plots for every weekday,
-    create_weekday_plots(Y_pred, Y, dates, results_path) 
+    #create_weekday_plots(Y_pred, Y, dates, results_path) 
     # 6. RMSE, MAPE, MAE
     compute_value_metrics(Y_pred, Y, results_path)
     # 7. save the actual values for later use
     save_values(Y_pred, Y, dates, results_path)
     # 8. permutation feature importance
-    permutation_feature_importance(model, testing_data, appliances, min_max_dict, results_path)
+    #permutation_feature_importance(model, testing_data, appliances, min_max_dict, results_path)
 
 def EVO_pilot_test_model(model_params, model, testing_data, min_max_dict, out_dir, results_name):
     
