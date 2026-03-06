@@ -48,3 +48,17 @@ def _create_min_max_dictionary(df):
         min_max_dict[col] = (col_min, col_max)
     
     return min_max_dict
+
+def load_new_data(file_path: str):
+
+    train_path = file_path + '/' + 'training.csv'
+    validation_path = file_path + '/' + 'validation.csv'
+    testing_path = file_path + '/' + 'testing.csv'
+
+    train_df = pd.read_csv(file_path, parse_dates=['time'])
+    val_df = pd.read_csv(file_path, parse_dates=['time'])
+    test_df = pd.read_csv(file_path, parse_dates=['time'])
+
+    appliances = [ name for name in csv_df.columns if name != 'time' and name != 'main' ]
+
+    return ((training, validation, testing), appliances, _create_min_max_dictionary(training))
