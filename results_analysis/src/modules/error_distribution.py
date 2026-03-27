@@ -1,8 +1,21 @@
 import matplotlib.pyplot as plt
 import statistics as stats
 
+
 def _plot_error_distribution(Y, Y_pred, name, save_path):
-   
+    """ Plots and saves the error distribution of Y_pred
+
+    First this function computes the error, between Y and Y_pred,
+    then the error will be binned into a histogram, which will be 
+    normalized and then plotted along with the mean error and its 
+    standard devation.
+
+    Keyword arguments:
+    Y           -- true values
+    Y_pred      -- inferred values
+    name        -- name of the plot
+    save_path   -- path to with the plot is saved
+    """
     plt.style.use('ggplot')
     fig, ax = plt.subplots()
 
@@ -49,8 +62,9 @@ def cumulative_error_distribution_all(
     Y_pred_dict,
     keys,
     name,
-    save_path):
-
+    save_path
+):
+    """ calculates ands plots the daily error for all households """ 
     Y, Y_pred = [], []
     for house in keys:
         Y_house = Y_dict[house]
@@ -70,7 +84,7 @@ def cumulative_error_distribution_all(
     _plot_error_distribution(Y, Y_pred, name, save_path)
     
 def error_distribution_all(Y_dict, Y_pred_dict, keys, name, save_path):
-    
+    """ calculates and plots the error for all households"""
     # calculate total error
     Y, Y_pred = [], []
     for house in keys:
@@ -83,10 +97,11 @@ def error_distribution_all(Y_dict, Y_pred_dict, keys, name, save_path):
     _plot_error_distribution(Y, Y_pred, name, save_path)
 
 def error_distribution(Y, Y_pred, name, save_path):
+    """ plots the error distribution for 1 household (or aggregate)"""
     _plot_error_distribution(Y, Y_pred, name, save_path)
 
 def cumulative_error_distribution(Y, Y_pred, name, save_path):
-   
+    """  plots the daily error distrib for 1 household (or aggregate)""" 
     cum_Y, cum_Y_pred = [], []
     day_Y, day_Y_pred, count = 0, 0, 0
     for y, y_hat in zip(Y, Y_pred):
@@ -101,15 +116,31 @@ def cumulative_error_distribution(Y, Y_pred, name, save_path):
 
     _plot_error_distribution(cum_Y, cum_Y_pred, name, save_path)
 
+
 def _plot_weekday_error_distribution(Y, Y_pred, name, save_path):
+    """ Plots and saves the weekday error distributions of Y_pred
+
+    For every day of the week the error will first be calculated,
+    then it will be plotted as a boxplot, where every weekday has its
+    own boxplot.
+
+    Keyword arguments:
+    Y           -- true values
+    Y_pred      -- inferred values
+    name        -- name of the plot
+    save_path   -- path to with the plot is saved
+    """
 
     plt.style.use('ggplot')
     fig, ax = plt.subplots()
 
     error = []
     for weekday in zip(Y, Y_pred):
-        error.append(
-            [ 100 * (y_hat - y) / (y + 1) for (y, y_hat) in zip(*weekday) ])
+        error.append([
+            100 * (y_hat - y) / (y + 1) 
+            for (y, y_hat) 
+            in zip(*weekday) 
+        ])
 
     ax.boxplot(
         x=error,
@@ -120,7 +151,8 @@ def _plot_weekday_error_distribution(Y, Y_pred, name, save_path):
         boxprops={'facecolor' : 'tab:blue', 'edgecolor' : 'tab:blue'},
         whiskerprops={'color' : 'tab:orange', 'linewidth' : 1.5},
         capprops={'color' : 'tab:orange'},
-        flierprops={'markersize': 0.15, 'color' : 'tab:gray'})
+        flierprops={'markersize': 0.15, 'color' : 'tab:gray'}
+    )
 
     plt.suptitle(name)
 
@@ -169,7 +201,8 @@ def weekday_error_distribution_all(
     dates,
     keys,
     name,
-    save_path):
+    save_path
+):
 
     Y       = [ [] for _ in range(0,7) ]
     Y_pred  = [ [] for _ in range(0,7) ] 
@@ -196,15 +229,26 @@ def weekday_error_distribution(Y, Y_pred, dates, name, save_path):
                 Y_weekday[weekday].append(y)
                 Y_pred_weekday[weekday].append(y_hat)
 
-    _plot_weekday_error_distribution(Y_weekday, Y_pred_weekday, name, save_path)
+    _plot_weekday_error_distribution(
+        Y_weekday,
+        Y_pred_weekday,
+        name,
+        save_path
+    )
 
-def cumulative_weekday_error_distribution(Y, Y_pred, dates, name, save_path):
+def cumulative_weekday_error_distribution(
+        Y,
+        Y_pred,
+        dates,
+        name,
+        save_path
+):
 
     Y_weekday       = [ [] for _ in range(0,7) ]
     Y_pred_weekday  = [ [] for _ in range(0,7) ]
     for weekday in range(0,7):
         day_Y, day_Y_pred = 0, 0
-        for y, y_hat, date in zip(Y_house, Y_pred_house, dates_house):
+        for y, y_hat, date in zip(Y, Y_pred, dates):
 
             if (date.weekday() == weekday):
                 counting = True
@@ -216,8 +260,13 @@ def cumulative_weekday_error_distribution(Y, Y_pred, dates, name, save_path):
                 day_Y_pred = day_Y_pred + y_hat
             elif (day_Y != 0 and day_Y_pred != 0):
                 # if we were acumulating for the day and we are done 
-                Y[weekday].append(day_Y)
-                Y_pred[weekday].append(day_Y_pred)
+                Y_weekday[weekday].append(day_Y)
+                Y_pred_weekday[weekday].append(day_Y_pred)
                 day_Y, day_Y_pred = 0, 0
 
-    _plot_weekday_error_distribution(Y_weekday, Y_pred_weekday, name, save_path)
+    _plot_weekday_error_distribution(
+        Y_weekday,
+        Y_pred_weekday,
+        name,
+        save_path
+    )

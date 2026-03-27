@@ -50,16 +50,16 @@ def main():
         name='Baseline aggregate cumulative weekday error distribution',
         save_path=save_dir)
     cumulative_weekday_error_distribution(
-        Y=Y_agg_basline,
-        Y_pred=Y_pred_agg_basline,
-        dates=dates_agg_basline,
-        name='Baseline aggregate cumulative weekday error distribution',
+        Y=Y_agg_baseline,
+        Y_pred=Y_pred_agg_baseline,
+        dates=dates_agg_baseline,
+        name='Summed baseline cumulative weekday error distribution',
         save_path=save_dir)
     cumulative_weekday_error_distribution(
         Y=Y_agg_NILM,
         Y_pred=Y_pred_agg_NILM,
         dates=dates_agg_NILM,
-        name='Baseline aggregate cumulative weekday error distribution',
+        name='Summed enhanced cumulative weekday error distribution',
         save_path=save_dir)
 
 if __name__ == '__main__':

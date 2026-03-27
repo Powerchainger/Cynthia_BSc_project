@@ -1,4 +1,5 @@
 import sys
+import pandas as pd
 
 from modules.io.load import load_model_params, load_model, load_data
 from modules.model.run import run_model
@@ -31,18 +32,21 @@ def main() :
     model_path = sys.argv[1]
     model_params_path = sys.argv[2]
     input_data_path = sys.argv[3]
+    min_max_dict_path = sys.argv[4]
+    is_NILM = False 
 
     # load the model which we want to run
     model_params = load_model_params(model_params_path)
     model = load_model(model_path, model_params)
 
     # load the data to run the model on
-    #TODO load data for run model
-    input_data = load_data(input_data_path)
+    input_data = pd.read_csv(input_data_path, parse_dates=['time'])
+
+    with open(min_max_dict_path, 'r') as file:
+        min_max_dict = json.load(file)
 
     # run the model
-    #TODO run model
-    run_model(model, input_data)
+    run_model(model, input_data, min_max_dict, out_dir)
 
 if __name__ == '__main__':
     main() 
