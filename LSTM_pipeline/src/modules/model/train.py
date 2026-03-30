@@ -89,9 +89,9 @@ def train_model(
             )
 
     print(
-        f'\nDone training model {file_name}, final training loss:{train_error:.5f}, final validation loss:{val_error:.5f}'
+        f'\nDone training model {file_name}\n final training loss:{train_error:.5f}, final validation loss:{val_error:.5f}'
     )    
-    save_model(model, out_dir, file_name)
+    save_model(model, min_max_dict, out_dir, file_name)
     return model, running_validation
 
 def train_one_epoch(model, X, Y, loss_function, optimizer):

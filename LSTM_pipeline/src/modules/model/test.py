@@ -9,9 +9,9 @@ from modules.data_processing.input_tensors import create_input_tensors
 
 #from modules.metrics.plot import create_plot_per_day, create_EVO_plots
 #from modules.metrics.error import compute_value_metrics
-#from modules.metrics.partial_dependence import plot_partial_dependence
+from modules.metrics.partial_dependence import plot_partial_dependence
 #from modules.metrics.cumulative_sum import plot_cumulative_sum_results, create_weekday_plots
-#from modules.metrics.perm_feature_importance import permutation_feature_importance
+from modules.metrics.perm_feature_importance import permutation_feature_importance
 
 def test_model(
     model,
@@ -48,13 +48,14 @@ def test_model(
     with torch.no_grad():
         Y_pred = model(X)
     
+    #has partially been moved to results_analysis
     # 1. create subfolder for results
     results_path = out_dir + '/' + results_name + '/' 
     os.makedirs(results_path, exist_ok=True)
     # 2. create cum_sum 
     #plot_cumulative_sum_results(Y_pred, Y, dates, results_path)  
     # 3. create pdp,
-    #plot_partial_dependence(model, testing_data, appliances, min_max_dict, results_path) 
+    plot_partial_dependence(model, testing_data, appliances, min_max_dict, results_path) 
     # 4. create all plots,
     #create_plot_per_day(Y_pred, Y, dates, results_path) 
     # 5. create plots for every weekday,
@@ -64,7 +65,7 @@ def test_model(
     # 7. save the actual values for later use
     save_values(Y_pred, Y, dates, results_path)
     # 8. permutation feature importance
-    #permutation_feature_importance(model, testing_data, appliances, min_max_dict, results_path)
+    permutation_feature_importance(model, testing_data, appliances, min_max_dict, results_path)
 
 # Old code, might not work anymore
 #def EVO_pilot_test_model(model_params, model, testing_data, min_max_dict, out_dir, results_name):

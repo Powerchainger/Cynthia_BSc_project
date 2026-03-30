@@ -1,16 +1,22 @@
 import torch
 import os
+import json
 import pandas as pd
 
 from modules.misc.utils import find_next_day_from_results
 
-def save_model(model, out_dir, file_name) :
+def save_model(model, min_max_dict, out_dir, file_name) :
     """ Creates a dir to save the model into as a .pt file"""
     dir_path = out_dir + '/models/'
     os.makedirs(dir_path, exist_ok=True)
 
-    file_path = dir_path + file_name + '.pt'
-    torch.save(model.state_dict(), file_path)
+    model_file_path = dir_path + file_name + '.pt'
+    torch.save(model.state_dict(), model_file_path)
+
+    dict_file_path = dir_path + file_name + '_min_max_dict.JSON'
+    with open(dict_file_path, 'w') as f:
+        json.dump(min_max_dict, f)
+
 
 def save_values(Y_pred, Y, dates, out_dir, file_name='values'):
     """ Saves results to a csv file 

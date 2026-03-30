@@ -1,6 +1,9 @@
 import torch
 import os
+import numpy as np
+import pandas as pd
 
+from modules.data_processing.pre_processing import pre_process
 from modules.model.forecaster import Forecaster as model
 
 def run_model(
@@ -26,7 +29,7 @@ def run_model(
     """
 
     time_steps = model.time_steps
-    X = _create_single_input_tensor(input)
+    X = _create_single_input_tensor(input, appliances, min_max_dict)
 
     model.eval()
     with torch.no_grad():
@@ -35,14 +38,14 @@ def run_model(
     results_path = out_dir + '/' + file_name + '.csv'
     df = pd.DataFrame({
         'hour' : list(range(0,24)),
-        'predicted' : Y_pred
+        'predicted' : Y_pred[0]
     })
 
-    df.to_csv(save_path, index=False)
+    df.to_csv(results_path, index=False)
     print(Y_pred)
     return list(Y_pred)
 
-def _create_single_input_tensor(raw):
+def _create_single_input_tensor(raw, appliances, min_max_dict):
     """Creates a single input tensor from the raw input data"""
-    samples = pre_process(raw)
-    return torch.tensor(np.array(samples[:24]), dtype=torch.float32)
+    samples = pre_process(raw, appliances, min_max_dict)
+    return torch.tensor(np.array([samples[:24]]), dtype=torch.float32)
