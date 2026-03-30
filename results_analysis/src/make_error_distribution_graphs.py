@@ -27,28 +27,32 @@ def main():
         Y_pred_dict=baseline,
         keys=keys,
         name='baseline error distribution',
-        save_path=save_dir)
+        save_path=save_dir
+    )
 
     error_distribution_all(
         Y_dict=true,
         Y_pred_dict=NILM,
         keys=keys,
         name='enhanced error distribution',
-        save_path=save_dir)
+        save_path=save_dir
+    )
 
     cumulative_error_distribution_all(
         Y_dict=true,
         Y_pred_dict=baseline,
         keys=keys,
         name='baseline daily error distribution',
-        save_path=save_dir)
+        save_path=save_dir
+    )
 
     cumulative_error_distribution_all(
         Y_dict=true,
         Y_pred_dict=NILM,
         keys=keys,
         name='enhanced daily error distribution', 
-        save_path=save_dir)
+        save_path=save_dir
+    )
 
 if __name__ == '__main__':
     main()
