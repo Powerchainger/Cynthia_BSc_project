@@ -27,7 +27,7 @@ def main():
     true, baseline, NILM, _ = load_results(results_dir)
 
     save_dir = out_dir + '/metrics/'
-    os.makedirs(save_dir, exists_ok=True)
+    os.makedirs(save_dir, exist_ok=True)
 
     save_metrics(
         Y_dict=true,

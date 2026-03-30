@@ -1,0 +1,42 @@
+This directory contains code for the LSTM pipeline 
+
+installing the packages:
+1. create a venv by running:
+    "python -m venv <venv_name>"
+2. activate the venv:
+    "source bin/<venv_name> activate"
+3. download the packages:
+    pip install -r requirements.txt
+
+Running the code:
+    python src/run_individual_experiment.py <path_to_args.json>
+
+    - Runs the experiment for an individual household.
+      See in/ for examples of the arg.json files 
+
+      For an individual household hyper-parameter tuning can be performed.
+      A baseline model and an Enhanced model can be trained as well.
+      After either training or loading models testing will be performed,
+      PDP plots and feature permutation importance will be stored as well with
+      the values which were the result of inference on the testing data.
+
+    python src/run_aggregate_experiment.py <path_to_args.json>
+
+    - Runs the experiment for the aggregate of the households. It will train the 
+      single baseline model for the arggregate experiment
+
+      See in/ for examples of the arg files.
+      
+      Hyper-parameter tuning can be performed.
+      Training the model can also be performed.
+      after either training or loading a model testing will be performed.
+      PDP plots and perm-feature importance will be stored along with the values
+      for inference on the testing data.
+
+    python src/run_model.py <path_to_model_parameters.json> <path_to_model.pt> <path_to_csv> <path_to_min_max_dict.json> <dir_to_save_results_to>
+
+    - Runs initializes a model from a file, and runs it for a single input,
+      Which is saved as 'results.csv'. If the csv contains columns with 
+      appliance data it is used. 
+
+    EVO_pilot code is unused but still in the repo for completeness sake

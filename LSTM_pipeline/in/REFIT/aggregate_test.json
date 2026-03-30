@@ -1,0 +1,11 @@
+{
+        "csv_path" : "../data/REFIT/avg_kwh_hourly/aggregate/aggregate.csv",
+        "out_path" : "out/TEST_AGGREGATE/", 
+        "load_params" : true,
+        "params_baseline_path" : "out/TEST_AGGREGATE/model_parameters/params_baseline.json",
+        "params_NILM_path" : "",
+        "load_models" : true,
+        "model_baseline_path" : "out/TEST_AGGREGATE/models/model_baseline.pt",
+        "model_NILM_path" : "",
+        "time_steps": 1 
+}

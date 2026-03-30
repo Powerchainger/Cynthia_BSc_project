@@ -1,0 +1,11 @@
+{
+        "csv_path": "../data/REFIT/avg_kwh_hourly/cropped/house_12/house_12.csv", 
+        "out_path": "out/TEST/", 
+        "load_params": true, 
+        "params_baseline_path": "out/TEST/model_parameters/params_baseline.json",
+        "params_NILM_path": "out/TEST/model_parameters/params_NILM.json",
+        "load_models": false,
+        "model_baseline_path": "out/TEST/models/model_baseline.pt",
+        "model_NILM_path": "out/TEST/models/model_NILM.pt",
+        "time_steps": 1 
+}

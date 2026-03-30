@@ -14,9 +14,12 @@ def save_metrics(
         Y_house = Y_dict[house]
         Y_pred_house = Y_pred_dict[house]
 
-        MAPE = mean_absolute_percentage_error(Y, Y_pred)
-        RMSE = root_mean_squared_error(Y, Y_pred)
-        MAE = mean_absolute_error(Y, Y_pred
+        if(Y_house == []):
+            continue
+
+        MAPE = mean_absolute_percentage_error(Y_house, Y_pred_house)
+        RMSE = root_mean_squared_error(Y_house, Y_pred_house)
+        MAE = mean_absolute_error(Y_house, Y_pred_house)
 
         file_name = name_prefix + house + '.txt'
         file_path = save_path + '/' + file_name

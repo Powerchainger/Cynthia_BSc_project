@@ -1,0 +1,25 @@
+This directory contains code for the LSTM pipeline 
+
+installing the packages:
+1. create a venv by running:
+    "python -m venv <venv_name>"
+2. activate the venv:
+    "source bin/<venv_name> activate"
+3. download the packages:
+    pip install -r requirements.txt
+
+Running the code:
+
+    python src/compute_metrics.py <dir_containing_results_of_experiment> <dir_to_save_metrics_to>
+
+    computes the metrics for the results of all households and saves it to files, the metrics stored are MAE, RMSE, and MAPE
+
+    python src/make_error_distribution_graphs.py <dir_containing_results_of_experiment> <dir_to_save_plots_to>
+    python src/make_error_distribution_graphs_aggregate.py <dir_containing_results_of_experiment> <dir_to_save_plots_to>
+    
+    both plot error distribution graphs
+
+    python src/make_weekday_error_distribution_graphs.py <dir_containing_results_of_experiment> <dir_to_save_plots_to>
+    python src/make_weekday_error_distribution_graphs_aggregate.py <dir_containing_results_of_experiment> <dir_to_save_plots_to>
+
+    similar to the the previous two but weekday error distribution graphs

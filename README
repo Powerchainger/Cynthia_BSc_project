@@ -1,0 +1,7 @@
+This repo contains the code I used for my bachelor's project.
+It consists of 3 main directories:
+    -- data_analysis contains code for data analysis on the raw data for the models
+    -- results_analysis contains code for analysing the results from the models
+    -- LSTM_pipeline contains code for training, testing, and running the LSTM models
+
+see the README's in the other directories for installing the packag

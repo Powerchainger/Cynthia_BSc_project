@@ -1,0 +1,22 @@
+This directory contains code for data analysis
+
+installing the packages:
+1. create a venv by running:
+    "python -m venv <venv_name>"
+2. activate the venv:
+    "source bin/<venv_name> activate"
+3. download the packages:
+    pip install -r requirements.txt
+
+Running the code:
+    python src/dbscan.py <path_to_csv> <dir_to_save_dbscan_results_to> <name_of_file>
+    
+    This runs Dbscan on the csv file and saves the results to the given 
+    directory with the name of the file
+
+    python src/acf_pacf.py <path_to_csv> <dir_to_save_acf_plots_to>
+
+    This computes the autocorrelation function and partial autocorrelation and
+    saves it to the given directory
+
+    time_periods is unused but still in the repo for completeness sake 
