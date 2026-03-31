@@ -1,2 +1,6 @@
+# Ignore contents of data, and figures directory
 figures/*
+data/*
+
+# Ignore catches 
 */__pycache__/
