@@ -3,4 +3,4 @@ figures/
 data/
 
 # Ignore catches 
-*/__pycache__/
+/__pycache__/
