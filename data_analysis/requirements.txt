@@ -25,6 +25,7 @@ optuna==4.6.0
 packaging==25.0
 pandas==2.3.3
 pathspec==0.12.1
+patsy==1.0.2
 pillow==11.3.0
 platformdirs==4.3.8
 pycodestyle==2.14.0
@@ -43,11 +44,9 @@ setuptools==70.2.0
 shiboken2==5.13.2
 six==1.17.0
 SQLAlchemy==2.0.44
+statsmodels==0.14.6
 sympy==1.14.0
 threadpoolctl==3.6.0
-tkinter==3.12.11
-torch==2.9.0+cpu
-torchvision==0.24.0+cpu
 tqdm==4.67.1
 typing_extensions==4.15.0
 tzdata==2025.2

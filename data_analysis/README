@@ -14,7 +14,7 @@ Running the code:
     This runs Dbscan on the csv file and saves the results to the given 
     directory with the name of the file
 
-    python src/acf_pacf.py <path_to_csv> <dir_to_save_acf_plots_to>
+    python src/run_data_analysis.py <path_to_csv> <dir_to_save_acf_plots_to>
 
     This computes the autocorrelation function and partial autocorrelation and
     saves it to the given directory
