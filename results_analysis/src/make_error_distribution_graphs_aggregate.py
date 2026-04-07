@@ -6,6 +6,7 @@ from modules.utils import load_REFIT_results_aggregate as load_results
 from modules.error_distribution import error_distribution
 from modules.error_distribution import cumulative_error_distribution
 
+
 def main():
 
     if (len(sys.argv) < 3):
