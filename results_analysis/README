@@ -23,3 +23,9 @@ Running the code:
     python src/make_weekday_error_distribution_graphs_aggregate.py <dir_containing_results_of_experiment> <dir_to_save_plots_to>
 
     similar to the the previous two but weekday error distribution graphs
+
+    python src/make_result_plots.py <dir_containing_results_of_experiment> <dir_to_save_plots_to>
+    python src/make_result_plots_aggregate.py <dir_containing_results_of_experiment> <dir_to_save_plots_to>
+
+    This will plot the results compared to the true values for every day in the results
+

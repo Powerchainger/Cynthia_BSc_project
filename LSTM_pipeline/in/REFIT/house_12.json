@@ -1,10 +1,10 @@
 {
-        "csv_path": "../data/REFIT/avg_kwh_hourly/cropped/house_12.csv", 
+        "csv_path": "../data/REFIT/avg_kwh_hourly/cropped/house_12/house_12.csv", 
         "out_path": "out/REFIT/house_12/", 
-        "load_params": false, 
+        "load_params": true, 
         "params_baseline_path": "out/REFIT/house_12/model_parameters/params_baseline.json",
         "params_NILM_path": "out/REFIT/house_12/model_parameters/params_NILM.json",
-        "load_models": false,
+        "load_models": true,
         "model_baseline_path": "out/REFIT/house_12/models/model_baseline.pt",
         "model_NILM_path": "out/REFIT/house_12/models/model_NILM.pt",
         "time_steps": 48 

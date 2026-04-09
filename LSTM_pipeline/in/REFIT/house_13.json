@@ -1,5 +1,5 @@
 {
-        "csv_path": "../data/REFIT/avg_kwh_hourly/cropped/house_13.csv", 
+        "csv_path": "../data/REFIT/avg_kwh_hourly/cropped/house_13/house_13.csv", 
         "out_path": "out/REFIT/house_13/", 
         "load_params": true, 
         "params_baseline_path": "out/REFIT/house_13/model_parameters/params_baseline.json",

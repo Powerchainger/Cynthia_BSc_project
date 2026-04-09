@@ -30,7 +30,7 @@ def plot_partial_dependence(model, data, appliances, min_max_dict, out_dir):
         n = 50 
         range_to_test = np.arange(
             start=data[feature].min(),
-            stop= data[feature].max(),
+            stop= data[feature].max() + 1, # plus 1 in case min == max
             step=(data[feature].max() - data[feature].min()) / n
         )
 
