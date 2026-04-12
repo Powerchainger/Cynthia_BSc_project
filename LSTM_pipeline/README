@@ -20,6 +20,42 @@ Running the code:
       PDP plots and feature permutation importance will be stored as well with
       the values which were the result of inference on the testing data.
 
+      The input files contain the following fields:
+      - "csv_path", This is the path to the csv to use for the experiment,
+      the data from the csv will be split into training, validation, and
+      testing data. The split is 60% for training, 20% for validation, and 
+      20% for testing data
+
+      - "out_path", This is the path to the directory where the files that 
+      contain the results are stored.
+
+      - "load_params", a boolean. If it is false, hyper-parameter tuning will 
+      be performed using the training and validation data. If it is true then
+      the "params_baseline_path" and "params_NILM_path" need to be specified
+      and the hyper-parameters will be loaded from those files instead.
+
+      - "params_baseline_path", the path to the hyper-parameters for the 
+      baseline models, will be used when "load_params" is set to true
+
+      - "params_NILM_path", the path to the hyper-parameters for the enhanced
+      models, will be used when "load_params" is set  to true
+
+      - "load_models", a boolean. If it is false, models will be trained before
+      testing. If load models is true, models will be loaded from 
+      "model_baseline_path" and "model_NILM_path". Note that the model files 
+      only contain the weights of the model, which is why "load_params" must 
+      then also be true and the hyper-parameters of the models must also be
+      provided.
+
+      - "model_baseline_path", the path to the weights of the baseline model,
+      which is used when "load_models" is set to true
+
+      - "model_NILM_path", the path to the weights of the enhanced model, 
+      which is used when "load_models" is set to true
+
+      - "time_steps", the length of the input sequence that the models take,
+      this is the same for both the baseline model and the enhanced model.
+
     python src/run_aggregate_experiment.py <path_to_args.json>
 
     - Runs the experiment for the aggregate of the households. It will train the 
